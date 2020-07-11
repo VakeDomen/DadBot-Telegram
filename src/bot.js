@@ -23,7 +23,7 @@ bot.start(async (ctx) => {
 });
 
 function scheduleJobs(ctx) {
-    schedule.scheduleJob('0 0 7,10,12,15,20 * *', async function() {
+    schedule.scheduleJob({hour: [7, 11, 15, 22]}, async function() {
         sendAJoke(ctx);
     })
 }
