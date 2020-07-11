@@ -16,6 +16,9 @@ if (!process.env.DADJOKE_API_KEY) {
 const bot = new Telegram(process.env.BOT_TOKEN)
 
 bot.start(async (ctx) => {
+    ctx.reply("I will provide you with bad...i mean dad jokes");
+    ctx.reply("Here is one for the taste!");
+    sendAJoke(ctx);
     scheduleJobs(ctx);
 });
 
