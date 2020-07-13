@@ -18,25 +18,26 @@ const ctxts = [];
 
 
 bot.start(async (ctx) => {
-    ctx.reply("I will provide you with bad...i mean dad jokes");
-    ctx.reply("Here is one for the taste!");
-    sendAJoke(ctx);
-    console.log(ctx);
-    ctxts.push(ctx);
+    const chatId = await ctx.getChat().id;
+    console.log(ctxts)
+    if (!ctxts[chatId]) {
+        ctx.reply("I will provide you with bad...i mean dad jokes");
+        ctx.reply("Here is one for the taste!");
+        sendAJoke(ctx);
+        ctxts[chatId] = ctx;
+    } else {
+        ctx.reply("Already working...");
+    }
+    
 });
 
-function scheduleJobs(ctx) {
-    schedule.scheduleJob({hour: [7, 11, 15, 22]}, async function() {
-        sendAJoke(ctx);
-    })
-}
 schedule.scheduleJob({hour: [7, 11, 15, 22]}, async function() {
     sendAJokeToAllCtx();
 })
 
 async function sendAJokeToAllCtx() {
-    for (const ctx of this.ctxts) {
-        sendAJoke(ctx);
+    for (const ctxId in this.ctxts) {
+        sendAJoke(this.ctxts[ctxid]);
     }
 }
 
