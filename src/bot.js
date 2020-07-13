@@ -14,12 +14,15 @@ if (!process.env.DADJOKE_API_KEY) {
 }
 
 const bot = new Telegram(process.env.BOT_TOKEN)
+const ctxts = [];
+
 
 bot.start(async (ctx) => {
     ctx.reply("I will provide you with bad...i mean dad jokes");
     ctx.reply("Here is one for the taste!");
     sendAJoke(ctx);
-    scheduleJobs(ctx);
+    console.log(ctx);
+    ctxts.push(ctx);
 });
 
 function scheduleJobs(ctx) {
@@ -27,6 +30,16 @@ function scheduleJobs(ctx) {
         sendAJoke(ctx);
     })
 }
+schedule.scheduleJob({hour: [7, 11, 15, 22]}, async function() {
+    sendAJokeToAllCtx();
+})
+
+async function sendAJokeToAllCtx() {
+    for (const ctx of this.ctxts) {
+        sendAJoke(ctx);
+    }
+}
+
 
 async function sendAJoke(ctx) {
     const joke = await getJoke();
