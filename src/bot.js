@@ -31,12 +31,16 @@ bot.start(async (ctx) => {
     
 });
 
-schedule.scheduleJob({hour: [7, 11, 15, 22]}, async function() {
-    sendAJokeToAllCtx();
-})
+bot.command('joke', (ctx) => {
+    sendAJoke(ctx);
+});
+
+//schedule.scheduleJob({hour: [7, 11, 15, 22]}, async function() {
+//    sendAJokeToAllCtx();
+//});
 
 async function sendAJokeToAllCtx() {
-    for (const ctxId in this.ctxts) {
+    for (const ctxId in ctxts) {
         sendAJoke(this.ctxts[ctxid]);
     }
 }
@@ -44,6 +48,7 @@ async function sendAJokeToAllCtx() {
 
 async function sendAJoke(ctx) {
     const joke = await getJoke();
+    console.log(joke);
     ctx.reply(joke.setup);
     await delay(5000);
     ctx.reply(joke.punchline);
@@ -54,7 +59,8 @@ async function getJoke() {
         method: 'GET',
         headers: { 'x-rapidapi-key': process.env.DADJOKE_API_KEY},
     }).catch(err => { console.log(err); return "Dad jokes got old..."});
-    resp = await resp.json();
+    resp = (await resp.json()).body[0];
+    console.log('resp', resp)
     return { setup: resp.setup, punchline: resp.punchline };
 }
 
